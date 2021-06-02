@@ -1,4 +1,4 @@
-package com.example.simpleimageimprover.utilities;
+package com.example.simpleimageimprover.Adapter;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +13,7 @@ import com.example.simpleimageimprover.R;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
-    private String[] localDataSet;
+    private final String[] localDataSet;
 
     public OnClickListener onclick;
     /**
@@ -21,7 +21,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
      * (custom ViewHolder).
      */
     public interface OnClickListener {
-        public void selectItem(int position);
+        void selectItem(int position);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
@@ -58,6 +58,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     // Create new views (invoked by the layout manager)
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         // Create a new view, which defines the UI of the list item
