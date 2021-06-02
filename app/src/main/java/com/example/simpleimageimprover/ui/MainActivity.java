@@ -26,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        insertButton.setOnClickListener(v -> {
-            takeImage();
-        });
+        insertButton.setOnClickListener(v -> takeImage());
     }
 
     private void takeImage() {
