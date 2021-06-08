@@ -97,11 +97,13 @@ public class ResultActivity extends AppCompatActivity implements RecyclerAdapter
             Log.i(TAG, "" + file);
             if (file.exists())
                 file.delete();
+            Log.i(TAG, "startttttt");
             try {
                 FileOutputStream out = new FileOutputStream(file);
                 outputImage.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 out.flush();
                 out.close();
+                Log.i(TAG, "enddddd");
                 Toast.makeText(this, "Saved! " + file.getPath(), Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
                 e.printStackTrace();
