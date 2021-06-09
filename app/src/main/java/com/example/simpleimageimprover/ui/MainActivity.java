@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.simpleimageimprover.R;
 import com.example.simpleimageimprover.utilities.HelperClass;
@@ -21,6 +22,13 @@ import butterknife.ButterKnife;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.button_insert)
     Button insertButton;
+    @BindView(R.id.tv)
+    TextView textView;
+
+    // Used to load the 'native-lib' library on application startup.
+    static {
+        System.loadLibrary("native-lib");
+    }
 
     public static final int PICK_IMAGE = 1;
     public static final int CLICK_PICTURE = 2;
@@ -33,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         insertButton.setOnClickListener(v -> takeImage());
+        textView.setText(stringFromJNI());
     }
 
     private void takeImage() {
@@ -40,17 +49,13 @@ public class MainActivity extends AppCompatActivity {
                 "Cancel" };
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Add Photo!");
-        builder.setItems(items, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int item) {
-                if (items[item].equals("Take Photo")) {
-                    cameraImage();
-                }
-                else if (items[item].equals("Choose from Gallery")) {
-                    galleryImage();
-                } else if (items[item].equals("Cancel")) {
-                    dialog.dismiss();
-                }
+        builder.setItems(items, (dialog, item) -> {
+            if (items[item].equals("Take Photo")) {
+                cameraImage();
+            } else if (items[item].equals("Choose from Gallery")) {
+                galleryImage();
+            } else if (items[item].equals("Cancel")) {
+                dialog.dismiss();
             }
         });
         builder.show();
@@ -82,7 +87,6 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_IMAGE && resultCode == RESULT_OK && null != data)  {
-            //TODO: action
             Intent intent = new Intent(this, ResultActivity.class);
             intent.putExtra(HelperClass.REAL_URI, data.getData().toString());
             startActivity(intent);
@@ -93,4 +97,10 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+
+    /**
+     * A native method that is implemented by the 'native-lib' native library,
+     * which is packaged with this application.
+     */
+    public native String stringFromJNI();
 }
